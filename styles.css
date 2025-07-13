@@ -51,88 +51,84 @@ button:active {
     transform: scale(0.98);
 }
 
+/* --- AÑADIR ESTE NUEVO BLOQUE COMPLETO --- */
+
 #touchControls {
-    display: none; /* Oculto en escritorio */
-    position: relative; /* Necesario para el posicionamiento absoluto de los botones */
-    width: 180px;  /* Tamaño del D-pad */
-    height: 180px; /* Igual al ancho para que sea un círculo perfecto */
+    display: none; /* Oculto en escritorio por defecto */
+    position: relative; /* Clave para el posicionamiento de los botones */
+    width: 180px;  /* Ancho del D-pad circular */
+    height: 180px; /* Alto del D-pad circular */
     margin-top: 20px;
+    z-index: 10; /* Asegura que esté por encima de otros elementos si es necesario */
 }
 
 #touchControls.visible {
-    display: block; /* Cambiamos a block en lugar de grid */
+    display: block; /* Lo hacemos visible en dispositivos táctiles */
+}
+
+/* Círculo de fondo para dar la forma visual */
+#touchControls::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: #2a2a2a;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    z-index: -1; /* Detrás de los botones */
 }
 
 #touchControls button {
-    position: absolute; /* Posicionamiento absoluto dentro del contenedor relativo */
+    position: absolute;
     width: 50%;
     height: 50%;
-    background-color: #444;
-    border: 2px solid #fff;
+    background: rgba(68, 68, 68, 0.5); /* Hacemos los botones semitransparentes */
+    border: none;
     color: #fff;
     font-size: 24px;
     
-    /* Reseteamos estilos que ya no aplican */
-    border-radius: 0;
-    padding: 0;
-    
-    /* Importante para que los eventos de toque funcionen correctamente */
+    /* Evita la selección de texto al arrastrar */
     -webkit-user-select: none;
     user-select: none;
 }
 
-/* --- LA MAGIA DE CLIP-PATH Y LA POSICIÓN --- */
+/* Efecto visual al presionar */
+#touchControls button:active {
+    background: rgba(85, 85, 85, 0.8);
+}
 
-/* Arriba */
+/* --- Posicionamiento y recorte de cada botón --- */
+
 #upBtn {
     top: 0;
     left: 25%;
     clip-path: polygon(50% 0, 100% 100%, 0 100%);
-    transform: rotate(180deg); /* Giramos el triángulo para que apunte hacia arriba */
-    padding-bottom: 10px; /* Ajuste para centrar el icono */
+    transform: rotate(180deg);
+    padding-bottom: 15px; /* Ajuste para centrar el icono */
 }
 
-/* Abajo */
 #downBtn {
     bottom: 0;
     left: 25%;
     clip-path: polygon(50% 100%, 100% 0, 0 0);
-    padding-top: 10px; /* Ajuste para centrar el icono */
+    padding-top: 15px;
 }
 
-/* Izquierda */
 #leftBtn {
     top: 25%;
     left: 0;
     clip-path: polygon(0 50%, 100% 100%, 100% 0);
-    padding-right: 10px; /* Ajuste para centrar el icono */
+    padding-right: 15px;
 }
 
-/* Derecha */
 #rightBtn {
     top: 25%;
     right: 0;
     clip-path: polygon(100% 50%, 0 0, 0 100%);
-    padding-left: 10px; /* Ajuste para centrar el icono */
+    padding-left: 15px;
 }
 
-/* --- ESTILOS VISUALES FINALES --- */
-
-/* Contenedor circular visual de fondo (opcional pero recomendado) */
-#touchControls::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #2a2a2a;
-    border-radius: 50%;
-    z-index: -1; /* Lo ponemos detrás de los botones */
-}
-
-/* Estilos de interacción */
-#touchControls button:active {
-    background-color: #555;
-    /* Quitamos el transform:scale para evitar problemas con clip-path */
-}
+/* --- FIN DEL BLOQUE A AÑADIR --- */
