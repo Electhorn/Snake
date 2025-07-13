@@ -27,12 +27,15 @@ body {
 canvas {
     background-color: #000;
     border: 2px solid #fff;
-    width: 90%; /* Ocupa el 90% del ancho de su contenedor (body) */
-    max-width: 450px; /* No crecerá más de 400px para mantener la nitidez */
-    aspect-ratio: 1 / 1; /* Garantiza que el canvas siempre sea un cuadrado */
+    width: 90%;
+    max-width: 450px;
+    aspect-ratio: 1 / 1;
 }
 
-button {
+/* --- INICIO DE LA CORRECCIÓN --- */
+
+/* 1. HACEMOS EL SELECTOR DEL BOTÓN DE REINICIO MÁS ESPECÍFICO */
+#restartButton {
     margin-top: 20px;
     padding: 12px 20px;
     font-size: 16px;
@@ -40,33 +43,32 @@ button {
     border: 2px solid #fff;
     background-color: #333;
     color: #fff;
+    transition: background-color 0.2s, border-color 0.2s; /* Transición suave */
 }
 
-button:hover {
+#restartButton:hover {
     background-color: #555;
     border-color: #ffcc00;
 }
 
-button:active {
+#restartButton:active {
     transform: scale(0.98);
 }
 
-/* --- AÑADIR ESTE NUEVO BLOQUE COMPLETO --- */
-
+/* 2. CÓDIGO CORREGIDO Y OPTIMIZADO PARA EL D-PAD */
 #touchControls {
-    display: none; /* Oculto en escritorio por defecto */
-    position: relative; /* Clave para el posicionamiento de los botones */
-    width: 180px;  /* Ancho del D-pad circular */
-    height: 180px; /* Alto del D-pad circular */
+    display: none;
+    position: relative;
+    width: 180px;
+    height: 180px;
     margin-top: 20px;
-    z-index: 10; /* Asegura que esté por encima de otros elementos si es necesario */
+    z-index: 10;
 }
 
 #touchControls.visible {
-    display: block; /* Lo hacemos visible en dispositivos táctiles */
+    display: block;
 }
 
-/* Círculo de fondo para dar la forma visual */
 #touchControls::before {
     content: '';
     position: absolute;
@@ -78,57 +80,57 @@ button:active {
     background: #2a2a2a;
     border: 2px solid #fff;
     border-radius: 50%;
-    z-index: -1; /* Detrás de los botones */
+    z-index: -1;
 }
 
 #touchControls button {
     position: absolute;
     width: 50%;
     height: 50%;
-    background: rgba(68, 68, 68, 0.5); /* Hacemos los botones semitransparentes */
+    background: rgba(68, 68, 68, 0.5);
     border: none;
     color: #fff;
     font-size: 24px;
     
-    /* Evita la selección de texto al arrastrar */
+    /* --- FIX: Reseteo y centrado con Flexbox --- */
+    margin: 0; /* Anula el margin-top heredado */
+    padding: 0; /* Anula el padding heredado */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     -webkit-user-select: none;
     user-select: none;
 }
 
-/* Efecto visual al presionar */
 #touchControls button:active {
     background: rgba(85, 85, 85, 0.8);
 }
 
-/* --- Posicionamiento y recorte de cada botón --- */
-
+/* Posicionamiento y recorte (sin cambios, ya era correcto) */
 #upBtn {
     top: 0;
     left: 25%;
-    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
     transform: rotate(180deg);
-    padding-bottom: 15px; /* Ajuste para centrar el icono */
 }
 
 #downBtn {
     bottom: 0;
     left: 25%;
-    clip-path: polygon(50% 100%, 100% 0, 0 0);
-    padding-top: 15px;
+    clip-path: polygon(50% 100%, 100% 0%, 0% 0%);
 }
 
 #leftBtn {
     top: 25%;
     left: 0;
-    clip-path: polygon(0 50%, 100% 100%, 100% 0);
-    padding-right: 15px;
+    clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
 }
 
 #rightBtn {
     top: 25%;
     right: 0;
-    clip-path: polygon(100% 50%, 0 0, 0 100%);
-    padding-left: 15px;
+    clip-path: polygon(100% 50%, 0% 100%, 0% 0%);
 }
 
-/* --- FIN DEL BLOQUE A AÑADIR --- */
+/* --- FIN DE LA CORRECCIÓN --- */
