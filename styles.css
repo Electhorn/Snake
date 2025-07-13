@@ -1,3 +1,8 @@
+/* --- Mejora Global para un Layout Predecible --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #333;
     color: #fff;
@@ -8,7 +13,17 @@ body {
     justify-content: center;
     height: 100vh;
     margin: 0;
+    /* Evita el scroll por rebote en móviles */
+    overscroll-behavior-y: contain;
 }
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 #scoreBoard {
     display: flex;
     gap: 40px;
@@ -16,14 +31,16 @@ body {
     font-size: 20px;
     min-height: 24px;
 }
-#scoreContainer {
+
+#scoreContainer, #highScoreContainer {
     margin-bottom: 0;
     font-size: inherit;
 }
+
 #highScoreContainer {
-    font-size: inherit;
-    color: #aaa
+    color: #aaa;
 }
+
 canvas {
     background-color: #000;
     border: 2px solid #fff;
@@ -32,9 +49,7 @@ canvas {
     aspect-ratio: 1 / 1;
 }
 
-/* --- INICIO DE LA CORRECCIÓN --- */
-
-/* 1. HACEMOS EL SELECTOR DEL BOTÓN DE REINICIO MÁS ESPECÍFICO */
+/* Selector específico para el botón de reinicio */
 #restartButton {
     margin-top: 20px;
     padding: 12px 20px;
@@ -43,7 +58,7 @@ canvas {
     border: 2px solid #fff;
     background-color: #333;
     color: #fff;
-    transition: background-color 0.2s, border-color 0.2s; /* Transición suave */
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 #restartButton:hover {
@@ -55,7 +70,8 @@ canvas {
     transform: scale(0.98);
 }
 
-/* 2. CÓDIGO CORREGIDO Y OPTIMIZADO PARA EL D-PAD */
+/* --- ESTILOS FINALES Y CORRECTOS PARA EL D-PAD CIRCULAR --- */
+
 #touchControls {
     display: none;
     position: relative;
@@ -78,7 +94,6 @@ canvas {
     width: 100%;
     height: 100%;
     background: #2a2a2a;
-    border: 2px solid #fff;
     border-radius: 50%;
     z-index: -1;
 }
@@ -87,32 +102,29 @@ canvas {
     position: absolute;
     width: 50%;
     height: 50%;
-    background: rgba(68, 68, 68, 0.5);
+    background: rgba(68, 68, 68, 0.6);
     border: none;
     color: #fff;
     font-size: 24px;
-    
-    /* --- FIX: Reseteo y centrado con Flexbox --- */
-    margin: 0; /* Anula el margin-top heredado */
-    padding: 0; /* Anula el padding heredado */
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-
     -webkit-user-select: none;
     user-select: none;
 }
 
 #touchControls button:active {
-    background: rgba(85, 85, 85, 0.8);
+    background: rgba(85, 85, 85, 0.9);
 }
 
-/* Posicionamiento y recorte (sin cambios, ya era correcto) */
+/* Posicionamiento y recorte de cada botón */
 #upBtn {
     top: 0;
     left: 25%;
     clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-    transform: rotate(180deg);
+    /* Eliminamos el transform: rotate(180deg) */
 }
 
 #downBtn {
@@ -132,5 +144,3 @@ canvas {
     right: 0;
     clip-path: polygon(100% 50%, 0% 100%, 0% 0%);
 }
-
-/* --- FIN DE LA CORRECCIÓN --- */

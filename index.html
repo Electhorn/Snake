@@ -5,27 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake</title>
+    <!-- Opcional pero recomendado: Añade un favicon.ico en tu proyecto -->
+    <!-- <link rel="icon" type="image/x-icon" href="/favicon.ico"> -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>Snake</h1>
-    <div id="scoreBoard">
-        <div id="scoreContainer">
-            Puntuación: <span id="scoreValue">0</span>
+    <!-- Añadimos la etiqueta <main> para envolver el contenido principal -->
+    <main>
+        <h1>Snake</h1>
+        <div id="scoreBoard">
+            <div id="scoreContainer">
+                Puntuación: <span id="scoreValue">0</span>
+            </div>
+            <div id="highScoreContainer">Mejor:
+                <span id="highScoreValue">0</span>
+            </div>
         </div>
-        <div id="highScoreContainer">Mejor:
-            <span id="highScoreValue">0</span>
+        <canvas id="gameCanvas" role="application" aria-label="Tablero del juego Snake"></canvas>
+        <div id="touchControls">
+            <button id="upBtn">▲</button>
+            <button id="leftBtn">◄</button>
+            <button id="downBtn">▼</button>
+            <button id="rightBtn">►</button>
         </div>
-    </div>
-    <canvas id="gameCanvas"></canvas>
-    <div id="touchControls">
-        <button id="upBtn">▲</button>
-        <button id="leftBtn">◄</button>
-        <button id="downBtn">▼</button>
-        <button id="rightBtn">►</button>
-    </div>
-    <button id="restartButton" style="display:none;">Reiniciar Juego</button>
+        <button id="restartButton" style="display:none;">Reiniciar Juego</button>
+    </main>
+
+    <!-- Añadimos un mensaje para usuarios sin JavaScript -->
+    <noscript>
+        <div>
+            <h2>Esta aplicación requiere JavaScript para funcionar.</h2>
+            <p>Por favor, habilita JavaScript en la configuración de tu navegador.</p>
+        </div>
+    </noscript>
     <script src="snake.js"></script>
 </body>
 
