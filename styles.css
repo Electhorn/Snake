@@ -1,8 +1,3 @@
-/* --- Mejora Global para un Layout Predecible --- */
-*, *::before, *::after {
-    box-sizing: border-box;
-}
-
 body {
     background-color: #333;
     color: #fff;
@@ -13,17 +8,7 @@ body {
     justify-content: center;
     height: 100vh;
     margin: 0;
-    /* Evita el scroll por rebote en móviles */
-    overscroll-behavior-y: contain;
 }
-
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 #scoreBoard {
     display: flex;
     gap: 40px;
@@ -31,16 +16,14 @@ main {
     font-size: 20px;
     min-height: 24px;
 }
-
-#scoreContainer, #highScoreContainer {
+#scoreContainer {
     margin-bottom: 0;
     font-size: inherit;
 }
-
 #highScoreContainer {
-    color: #aaa;
+    font-size: inherit;
+    color: #aaa
 }
-
 canvas {
     background-color: #000;
     border: 2px solid #fff;
@@ -49,7 +32,6 @@ canvas {
     aspect-ratio: 1 / 1;
 }
 
-/* Selector específico para el botón de reinicio */
 #restartButton {
     margin-top: 20px;
     padding: 12px 20px;
@@ -70,77 +52,52 @@ canvas {
     transform: scale(0.98);
 }
 
-/* --- ESTILOS FINALES Y CORRECTOS PARA EL D-PAD CIRCULAR --- */
+/* --- INICIO DE LA CORRECCIÓN: D-PAD CIRCULAR DESLIZABLE --- */
 
 #touchControls {
-    display: none;
+    display: none; /* Se activa con JS si hay pantalla táctil */
     position: relative;
-    width: 180px;
-    height: 180px;
+    width: 160px; /* Tamaño del D-Pad */
+    height: 160px;
     margin-top: 20px;
     z-index: 10;
-}
-
-#touchControls.visible {
-    display: block;
-}
-
-#touchControls::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    background: #2a2a2a;
-    border-radius: 50%;
-    z-index: -1;
-}
-
-#touchControls button {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    background: rgba(68, 68, 68, 0.6);
-    border: none;
-    color: #fff;
-    font-size: 24px;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    -webkit-user-select: none;
+    background: rgba(50, 50, 50, 0.7); /* Fondo semitransparente */
+    border: 2px solid #fff;
+    border-radius: 50%; /* La clave para hacerlo circular */
+    -webkit-user-select: none; /* Evita la selección de texto en el control */
     user-select: none;
 }
 
-#touchControls button:active {
-    background: rgba(85, 85, 85, 0.9);
+#touchControls.visible {
+    display: flex; /* Usamos flex para centrar los elementos internos si fuera necesario */
+    justify-content: center;
+    align-items: center;
 }
 
-/* Posicionamiento y recorte de cada botón */
-#upBtn {
-    top: 0;
-    left: 25%;
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-    /* Eliminamos el transform: rotate(180deg) */
+/* Estilo para las flechas visuales */
+#touchControls .arrow {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 28px;
+    pointer-events: none; /* Hacemos que las flechas no interfieran con el tacto */
 }
 
-#downBtn {
-    bottom: 0;
-    left: 25%;
-    clip-path: polygon(50% 100%, 100% 0%, 0% 0%);
+/* Posicionamiento de cada flecha */
+#upArrow {
+    top: 12px;
+}
+#downArrow {
+    bottom: 12px;
+}
+#leftArrow {
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#rightArrow {
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-#leftBtn {
-    top: 25%;
-    left: 0;
-    clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
-}
-
-#rightBtn {
-    top: 25%;
-    right: 0;
-    clip-path: polygon(100% 50%, 0% 100%, 0% 0%);
-}
+/* --- FIN DE LA CORRECCIÓN --- */

@@ -28,7 +28,6 @@ let foodY;
 let dx;
 let dy;
 let changingDirection = false;
-let isDraggingOnDPad = false;
 let lastTouchDirection = null; // 'up', 'down', 'left', 'right'
 
 // --- FUNCIONES DEL JUEGO (SIN CAMBIOS) ---
@@ -196,33 +195,31 @@ function drawFood() {
   ctx.fillRect(foodX + offsetX, foodY + offsetY, scaledBox, scaledBox);
 }
 
-function updateDirectionFromTouch(event) {
-  const touch = event.touches[0];
+function updateDirectionFromSwipe(touch, dpadCenterX, dpadCenterY) {
   if (!touch) return;
 
-  const elementUnderFinger = document.elementFromPoint(
-    touch.clientX,
-    touch.clientY
-  );
+  // Calcula el vector desde el centro del D-pad hasta el punto de contacto
+  const vectorX = touch.clientX - dpadCenterX;
+  const vectorY = touch.clientY - dpadCenterY;
+
   let currentDirection = null;
 
-  if (elementUnderFinger) {
-    switch (elementUnderFinger.id) {
-      case "upBtn":
-        currentDirection = "up";
-        break;
-      case "downBtn":
-        currentDirection = "down";
-        break;
-      case "leftBtn":
-        currentDirection = "left";
-        break;
-      case "rightBtn":
-        currentDirection = "right";
-        break;
-    }
+  // Añadimos una "zona muerta" para evitar cambios de dirección accidentales en el centro
+  const deadzone = 15;
+  if (Math.abs(vectorX) < deadzone && Math.abs(vectorY) < deadzone) {
+    return; // No hagas nada si el dedo está muy cerca del centro
   }
 
+  // Determina si el movimiento es principalmente horizontal o vertical
+  if (Math.abs(vectorX) > Math.abs(vectorY)) {
+    // Movimiento horizontal
+    currentDirection = vectorX > 0 ? "right" : "left";
+  } else {
+    // Movimiento vertical
+    currentDirection = vectorY > 0 ? "down" : "up";
+  }
+
+  // Si la dirección ha cambiado, actualiza el estado del juego
   if (currentDirection && currentDirection !== lastTouchDirection) {
     lastTouchDirection = currentDirection;
     switch (currentDirection) {
@@ -247,37 +244,32 @@ function setupTouchControls() {
     const controls = document.getElementById("touchControls");
     controls.classList.add("visible");
 
-    controls.addEventListener(
-      "touchstart",
-      (event) => {
-        event.preventDefault();
-        if (!gameStarted) {
-          gameStarted = true;
-          lastRenderTime = 0;
-          window.requestAnimationFrame(gameLoop);
-        }
-        isDraggingOnDPad = true;
-        updateDirectionFromTouch(event);
-      },
-      { passive: false }
-    );
+    let dpadRect = controls.getBoundingClientRect();
+    let dpadCenterX = dpadRect.left + dpadRect.width / 2;
+    let dpadCenterY = dpadRect.top + dpadRect.height / 2;
 
-    controls.addEventListener(
-      "touchmove",
-      (event) => {
-        event.preventDefault();
-        if (isDraggingOnDPad) {
-          updateDirectionFromTouch(event);
-        }
-      },
-      { passive: false }
-    );
+    // Recalcula el centro si la ventana cambia de tamaño
+    window.addEventListener("resize", () => {
+      dpadRect = controls.getBoundingClientRect();
+      dpadCenterX = dpadRect.left + dpadRect.width / 2;
+      dpadCenterY = dpadRect.top + dpadRect.height / 2;
+    });
 
-    window.addEventListener("touchend", (event) => {
-      if (isDraggingOnDPad) {
-        isDraggingOnDPad = false;
-        lastTouchDirection = null;
+    const handleTouch = (event) => {
+      event.preventDefault();
+      if (!gameStarted) {
+        gameStarted = true;
+        lastRenderTime = 0;
+        window.requestAnimationFrame(gameLoop);
       }
+      updateDirectionFromSwipe(event.touches[0], dpadCenterX, dpadCenterY);
+    };
+
+    controls.addEventListener("touchstart", handleTouch, { passive: false });
+    controls.addEventListener("touchmove", handleTouch, { passive: false });
+
+    window.addEventListener("touchend", () => {
+      lastTouchDirection = null; // Resetea la última dirección cuando se levanta el dedo
     });
   }
 }
