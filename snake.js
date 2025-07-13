@@ -63,6 +63,8 @@ function setupAndResizeGame() {
   updateHighScoreDisplay();
 
   restartGame();
+
+  draw();
 }
 
 function gameLoop(currentTime) {
@@ -249,6 +251,11 @@ function setupTouchControls() {
       "touchstart",
       (event) => {
         event.preventDefault();
+        if (!gameStarted) {
+          gameStarted = true;
+          lastRenderTime = 0;
+          window.requestAnimationFrame(gameLoop);
+        }
         isDraggingOnDPad = true;
         updateDirectionFromTouch(event);
       },
@@ -341,6 +348,7 @@ function updateScoreDisplay() {
 
 function restartGame() {
   document.getElementById("restartButton").style.display = "none";
+  gameStarted = false;
   gameOver = false;
   isPaused = false;
   const startPos = Math.floor(GRID_SIZE / 2);
@@ -357,9 +365,6 @@ function restartGame() {
   changingDirection = false;
   generateFood();
   updateHighScoreDisplay();
-
-  lastRenderTime = 0;
-  window.requestAnimationFrame(gameLoop);
 }
 
 function drawStartScreen() {
